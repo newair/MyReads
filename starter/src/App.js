@@ -14,7 +14,6 @@ function App() {
 
   const bookShelves = [{ shelfTitle: 'Currently Reading', key: 'currentlyReading' }, { shelfTitle: 'Want to read', key: 'wantToRead' }, { shelfTitle: 'Read', key: 'read' }]
   const [allBooks, setAllBooks] = useState([]);
-
   /**
    * This use effect fetches the books and set all books
    * in internal state
@@ -22,9 +21,9 @@ function App() {
   useEffect(() => {
 
     const fetchBooks = async () => {
-    let allBooksRes = [];
+      let allBooksRes = [];
       try {
-       allBooksRes = await getAll();
+        allBooksRes = await getAll();
       } catch (e) {
         console.error('Error receiving all the books', e);
         throw e;
@@ -49,9 +48,9 @@ function App() {
     }
 
     try {
-    const updatedResponse = await update(updatedBook, shelf);
+      const updatedResponse = await update(updatedBook, shelf);
 
-    if (!updatedResponse) throw Error('No response received from update call');
+      if (!updatedResponse) throw Error('No response received from update call');
     } catch (e) {
       console.error('Error received while trying to update the book', e);
       throw e;

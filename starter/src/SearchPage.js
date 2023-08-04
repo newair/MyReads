@@ -1,6 +1,25 @@
 import { useState } from "react";
 import Book from "./Book";
+import PropTypes from 'prop-types'
 
+/**
+ * Filter text based on the searchtext and allbooks
+ * @param {*} searchText 
+ * @param {*} allBooks 
+ * @returns 
+ */
+function filterText(searchText, allBooks) {
+  if (searchText) {
+    const searchedValue = searchText.toLowerCase();
+    const filtered = allBooks.filter(book => (book.title.toLowerCase().includes(searchedValue)
+      || book.authors.join(' ').toLowerCase().includes(searchedValue)
+      || book.industryIdentifiers.map(inId => inId.type).join(' ').toLowerCase().includes(searchedValue)
+    ));
+    return filtered;
+  } else {
+    return allBooks;
+  }
+}
 /**
  * Search page component that can be used to search books by
  * name, author and title
@@ -10,20 +29,13 @@ import Book from "./Book";
 function SearchPage(props) {
 
   const { allBooks, onCategoryChange } = props;
-  const [searchedBooks, setSearchedBooks] = useState(allBooks);
+
+  const [searchedText, setSearchedText] = useState();
+  const searchedBooks = filterText(searchedText, allBooks);
 
   const onTextChange = (e) => {
     e.preventDefault();
-
-    if (e && e.target && e.target.value) {
-      const searchedValue = e.target.value.toLowerCase();
-      const filtered = allBooks.filter(book => (book.title.toLowerCase().includes(searchedValue)
-        || book.authors.join(' ').toLowerCase().includes(searchedValue)
-        || book.industryIdentifiers.map(inId => inId.type).join(' ').toLowerCase().includes(searchedValue)
-      ));
-      setSearchedBooks(filtered);
-    }
-
+    setSearchedText(e.target.value);
   }
 
   return (<div className="search-books">
@@ -48,6 +60,11 @@ function SearchPage(props) {
       </ol>
     </div>
   </div>)
+}
+
+SearchPage.propTypes = {
+  allBooks: PropTypes.arrayOf(PropTypes.object),
+  onCategoryChange: PropTypes.func
 }
 
 export default SearchPage;
